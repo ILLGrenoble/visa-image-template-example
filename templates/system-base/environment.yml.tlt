@@ -1,8 +1,8 @@
 environment:
   proxy: {http_proxy}
   no_proxy: {no_proxy}
-  cpus: 4
-  memory: 8192
+  cpus: 1
+  memory: 4096
   disk_size: 15000
   ubuntu_mirror: http://archive.ubuntu.com/ubuntu/dists
   ubuntu_codename: bionic

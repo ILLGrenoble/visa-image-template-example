@@ -13,6 +13,8 @@ usage() {
 }
 
 export headless=true
+PACKER_HTTP_PROXY="\"\""
+PACKER_NO_PROXY_HOSTS="localhost"
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]
@@ -34,18 +36,20 @@ case $key in
 
 	-hp|--http-proxy)
 	VISA_HTTP_PROXY="$2"
+	PACKER_HTTP_PROXY="$2"
 	shift
 	shift
 	;;
 
 	-np|--no-proxy)
 	VISA_NO_PROXY_HOSTS="$2"
+	PACKER_NO_PROXY_HOSTS="$2"
 	shift
 	shift
 	;;
 
 	-nh|--not-headless)
-  headless=false
+ 	headless=false
 	shift
 	;;
 
@@ -78,7 +82,7 @@ fi
 export root_password=$VISA_ROOT_PASSWORD
 
 # Modify the files accordingly for the proxy
-sed -e "s|{http_proxy}|$VISA_HTTP_PROXY|g" -e "s|{no_proxy}|$VISA_NO_PROXY_HOSTS|g"  templates/system-base/environment.yml.tlt > templates/system-base/environment.yml
+sed -e "s|{http_proxy}|$PACKER_HTTP_PROXY|g" -e "s|{no_proxy}|$PACKER_NO_PROXY_HOSTS|g"  templates/system-base/environment.yml.tlt > templates/system-base/environment.yml
 sed -e "s|{http_proxy}|$VISA_HTTP_PROXY|g" -e "s|{https_proxy}|$VISA_HTTP_PROXY|g" -e "s|{no_proxy}|$VISA_NO_PROXY_HOSTS|g"  templates/system-base/system/etc/environment.tlt > templates/system-base/system/etc/environment
 
 # Copy PAM file
@@ -95,6 +99,7 @@ echo "Installing packme"
 pip3 install wheel
 pip3 install lib/packme
 
+export PACKER_LOG=1
 # Run packme
 packme --templates-base-dir templates --debug -l --input config.yml -c -r
 
