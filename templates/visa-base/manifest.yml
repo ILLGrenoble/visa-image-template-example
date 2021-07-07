@@ -1,0 +1,91 @@
+packer:
+  description: "Template for base VISA image"
+
+  builders:
+    - name: qemu
+      type: qemu
+      boot_command: none
+      iso_checksum: none
+      disk_image: True
+      disk_size: "{{ disk_size }}"
+      ssh_username: "{{ ssh_username }}"
+      ssh_password: "{{ root_password }}"
+      shutdown_command: "shutdown -P now"
+
+  provisioners:
+    - type: shell
+      script: scripts/dependencies.sh
+    - type: shell
+      script: scripts/visa_pam.sh
+    - type: shell
+      script: scripts/visa_user.sh
+    - type: file
+      source: system/etc/firefox/syspref.js
+      destination: /etc/firefox/syspref.js
+    - type: file
+      source: system/bin/auto-logout
+      destination: /usr/bin/auto-logout
+    - type: file
+      source: system/bin/xfce-logout
+      destination: /usr/bin/xfce-logout
+    - type: file
+      source: system/usr/local/bin/welcome-visa
+      destination: /usr/local/bin/welcome-visa
+    - type: shell
+      inline:
+        - mkdir -p /etc/visa
+    - type: file
+      source: system/etc/visa/public.pem
+      destination: /etc/visa/public.pem
+    - type: shell
+      inline:
+        - mkdir -p /etc/guacamole
+    - type: file
+      source: system/etc/guacamole/guacd.conf
+      destination: /etc/guacamole/guacd.conf
+    - type: file
+      source: system/etc/process-exporter.yml
+      destination: /etc/process-exporter.yml
+    - type: file
+      source: system/etc/supervisor/conf.d/process-exporter.conf
+      destination: /etc/supervisor/conf.d/process-exporter.conf
+    - type: file
+      source: system/etc/supervisor/conf.d/node-exporter.conf
+      destination: /etc/supervisor/conf.d/node-exporter.conf
+    - type: file
+      source: system/usr/share/backgrounds/visa-background.png
+      destination: /usr/share/backgrounds/visa-background.png
+    - type: file
+      source: system/etc/xdg/autostart/welcome.desktop
+      destination: /etc/xdg/autostart/welcome.desktop
+    - type: file
+      source: system/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+      destination: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+    - type: file
+      source: system/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+      destination: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+    - type: file
+      source: system/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
+      destination: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
+    - type: file
+      source: system/etc/xdg/xfce4/panel/default.xml
+      destination: /etc/xdg/xfce4/panel/default.xml
+    - type: file
+      source: system/etc/xdg/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
+      destination: /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
+    - type: file
+      source: system/etc/xdg/xfce4/xinitrc
+      destination: /etc/xdg/xfce4/xinitrc
+    - type: file
+      source: system/etc/polkit-1/localauthority/50-local.d/visa.pkla
+      destination: /etc/polkit-1/localauthority/50-local.d/visa.pkla
+    - type: shell
+      script: scripts/xrdp.sh
+    - type: shell
+      script: scripts/vm/configure.sh
+    - type: file
+      source: system/etc/pam.d/xrdp-sesman
+      destination: /etc/pam.d/xrdp-sesman
+    - type: file
+      source: system/etc/skel/.gtkrc-2.0
+      destination: /etc/skel/.gtkrc-2.0

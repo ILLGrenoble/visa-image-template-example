@@ -1,0 +1,49 @@
+packer:
+  description: "Template for VISA apps image"
+
+  builders:
+    - name: qemu
+      type: qemu
+      boot_command: none
+      iso_checksum: none
+      disk_image: True
+      ssh_username: "{{ ssh_username }}"
+      ssh_password: "{{ root_password }}"
+      shutdown_command: "shutdown -P now"
+      memory: "{{ memory }}"
+      disk_size: "{{ disk_size }}"
+      cpus: "{{ cpus }}"
+      qemuargs:
+        - - "-m"
+          - "{{ memory }}M"
+        - - "-smp"
+          - "{{ cpus }}"
+
+  provisioners:
+    - type: file
+      source: applications/silxview/system/usr/share/icons/silxview.png
+      destination: /usr/share/icons/silxview.png
+    - type: file
+      source: applications/silxview/system/usr/share/applications/silxview.desktop
+      destination: /usr/share/applications/silxview.desktop
+    - type: shell
+      script: applications/silxview/scripts/install.sh
+    - type: shell
+      script: applications/mantid/scripts/install.sh
+    - type: shell
+      script: applications/nexpy/scripts/install.sh
+    - type: shell
+      script: applications/jupyter/conda/scripts/install.sh
+    - type: shell
+      script: applications/jupyter/jupyter-lab/scripts/setup.sh
+    - type: file
+      source: applications/jupyter/jupyter-lab/system/opt/visa/jupyter/
+      destination: /opt/visa/jupyter
+    - type: file
+      source: applications/jupyter/jupyter-lab/system/etc/supervisor/conf.d/jupyterlab.conf
+      destination: /etc/supervisor/conf.d/jupyterlab.conf
+    - type: file
+      source: applications/jupyter/jupyter-kernels/system/tmp/environment_data_analysis.yml
+      destination: /tmp/environment_data_analysis.yml
+    - type: shell
+      script: applications/jupyter/jupyter-kernels/scripts/data-analysis/setup.sh

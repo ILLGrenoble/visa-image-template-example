@@ -1,0 +1,11 @@
+environment:
+  proxy: {http_proxy}
+  no_proxy: {no_proxy}
+  cpus: 4
+  memory: 8192
+  disk_size: 15000
+  ubuntu_mirror: http://archive.ubuntu.com/ubuntu/dists
+  ubuntu_codename: bionic
+  ubuntu_docker_image: ubuntu:18.04
+  preseed_file_name: preseed-system-base.cfg
+  ssh_username: root

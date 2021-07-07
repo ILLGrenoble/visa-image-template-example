@@ -1,0 +1,5 @@
+#!/bin/bash
+if [ ! -f "$HOME/.visa/welcome.lock" ]; then
+        zenity --info --text "This virtual machine is for demo purposes only and is not intended for use in a production environment." --title "Welcome to VISA!" --width 300 &
+        touch $HOME/.visa/welcome.lock
+fi

@@ -1,0 +1,64 @@
+version 0.7.0
+-------------
+* CHANGED   propagate the headless state to all children
+* CHANGED   better code for checking missing jinja 2 templates
+
+version 0.6.0
+-------------
+* CHANGED   existing templates are now skipped from packer run
+
+version 0.5.0
+-------------
+* ADDED     functionality for printing missing templates when rendering manifest.yml files
+* CHANGED   removed environment. prefix for all manifest templates
+
+version 0.4.0
+-------------
+* CHANGED   the vm_name is now part of the Jinja2 environment
+* CHANGED   cleaned up manifest and environment files
+* ADDED     added new Exception class
+
+version 0.3.0
+-------------
+* CHANGED   merged parameters templates into environment
+
+version 0.2.1
+-------------
+* CHANGED   the -v option can now be used without -t
+
+version 0.2.0
+-------------
+* ADDED     the version is now accessible from CLI
+
+version 0.1.1
+-------------
+* FIXED     runtime rrors when running packer
+* CHANGED   updated docstrings and stub files
+
+version 0.1.0
+-------------
+* CHANGED   added static type support
+
+version 0.0.5
+-------------
+* FIXED     bad variable name
+
+version 0.0.4
+-------------
+* FIXED     bug when running packme without templates selection
+
+version 0.0.3
+-------------
+* FIXED     bug when setting up templates base dir to cleanup function
+* CHANGED   renamed variable(s) for better readability
+
+version 0.0.2
+-------------
+* FIXED     the README file uploaded by pypi is now in markdown format
+
+version 0.0.1
+-------------
+* FIXED     regression when importing packme
+* ADDED     README.md file
+* CHANGED   reformatted README.rst file
+

@@ -1,0 +1,8 @@
+templates:
+  system-base: {}
+
+  visa-base:
+    extends: system-base
+
+  visa-apps:
+    extends: visa-base

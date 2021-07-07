@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=Silxview
+Exec=/usr/local/bin/silx view
+Icon=/usr/share/icons/silxview.png
+Terminal=false
+Type=Application
+Categories=Education;Math;Science
+GenericName=SilxView

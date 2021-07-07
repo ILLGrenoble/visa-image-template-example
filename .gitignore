@@ -1,0 +1,13 @@
+**/manifest.json
+**/packer_cache
+
+templates/system-base/system/etc/environment
+templates/system-base/environment.yml
+templates/visa-base/system/etc/visa/public.pem
+
+.vscode
+.idea
+.venv*
+builds
+.env
+*.img

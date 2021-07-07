@@ -1,0 +1,5 @@
+environment:
+  ssh_username: root
+  cpus: 4
+  memory: 8192
+  disk_size: 15000

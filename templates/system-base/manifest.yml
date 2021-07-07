@@ -1,0 +1,48 @@
+packer:
+  description: "Base template for base system image"
+
+  variables: {}
+
+  builders:
+    - name: qemu
+      type: qemu
+      format: qcow2
+      iso_checksum: none
+      iso_url: "{{ ubuntu_mirror }}/{{ ubuntu_codename }}-updates/main/installer-amd64/current/images/netboot/mini.iso"
+      ssh_username: "{{ ssh_username }}"
+      ssh_password: "{{ root_password }}"
+      ssh_timeout: 60m
+      accelerator: kvm
+      headless: "{{ headless }}"
+      shutdown_command: "shutdown -P now"
+      memory: "{{ memory }}"
+      cpus: "{{ cpus }}"
+      qemuargs:
+        - - "-m"
+          - "{{ memory }}M"
+        - - "-smp"
+          - "{{ cpus }}"
+      boot_wait: 5s
+      boot_command:
+        - "<tab> "
+        - "preseed/url=http://{% raw %}{{ .HTTPIP }}:{{ .HTTPPort }}{% endraw %}/{{ preseed_file_name }} "
+        - "auto-install/enable=true "
+        - "net.ifnames=0 "
+        - "netcfg/get_hostname={{ vm_name }} "
+        - "netcfg/hostname={{ vm_name }} "
+        - "mirror/http/proxy={{ proxy }} "
+        - "passwd/root-password={{ root_password }} "
+        - "passwd/root-password-again={{ root_password }} "
+        - "no_proxy={% raw %}{{ .HTTPIP }}{% endraw %},{{ no_proxy }} "
+        - "<enter>"
+      disk_size: "{{ disk_size }}"
+      http_directory: "http"
+
+  provisioners:
+    - type: file
+      source: "system/etc/apt/sources.list_{{ ubuntu_codename }}"
+      destination: "/etc/apt/sources.list"
+
+    - type: file
+      source: system/etc/environment
+      destination: /etc/environment

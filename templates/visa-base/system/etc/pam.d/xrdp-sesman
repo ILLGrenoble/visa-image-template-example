@@ -1,0 +1,19 @@
+# here are the per-package modules (the "Primary" block)
+auth    [success=2 default=ignore]      /lib/x86_64-linux-gnu/security/pam_visa.so /etc/visa/public.pem 60
+# here's the fallback if no module succeeds
+auth    requisite            pam_deny.so
+# prime the stack with a positive return value if there isn't one already;
+# this avoids us returning an error just because nothing sets a success code
+# since the modules above will each just jump around
+auth    required            pam_permit.so
+# and here are more per-package modules (the "Additional" block)
+auth    optional            pam_cap.so
+##%PAM-1.0
+
+session       required   pam_env.so readenv=1 envfile=/etc/environment
+session       required   pam_env.so readenv=1 envfile=/etc/default/locale
+
+@include common-account
+@include common-session
+@include common-password
+
