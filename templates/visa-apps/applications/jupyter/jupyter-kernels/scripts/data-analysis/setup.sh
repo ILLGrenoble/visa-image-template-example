@@ -16,3 +16,5 @@ $CONDA_EXE env create -f /tmp/environment_data_analysis.yml --force
 echo "Creating ipykernel for data analysis"
 
 $CONDA_ENVS_DIR/data-analysis/bin/python -m ipykernel install --prefix=$JUPYTER_DIR/jupyterlab --name 'python3' --display-name 'Data Analysis'
+
+conda clean -a -f -y

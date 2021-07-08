@@ -7,7 +7,6 @@ sed -i "s/xrdp\/xorg/xorg/g" /etc/xrdp/sesman.ini
 locale-gen en_US.UTF-8
 echo "xfce4-session" > /etc/skel/.Xclients
 
-mkdir /net4
 echo "Europe/Paris" | tee /etc/timezone
 dpkg-reconfigure --frontend noninteractive tzdata
 

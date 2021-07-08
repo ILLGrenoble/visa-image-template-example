@@ -2,4 +2,4 @@ environment:
   ssh_username: root
   cpus: 1
   memory: 4192
-  disk_size: 15000
+  disk_size: 10000

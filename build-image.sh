@@ -60,14 +60,14 @@ esac
 done
 
 # Verify PAM public/private keys parameters
-if [[ ( -z "$VISA_ROOT_PASSWORD" ) ]]; then
+if [ -z "$VISA_ROOT_PASSWORD" ]; then
 	echo "You need to specify a root password for the VM"
 	usage
 	exit
 fi
 
 # Verify root password is set
-if [[ ( ! -z "$VISA_PAM_PUBLIC_KEY" ) ]]; then
+if [ ! -z "$VISA_PAM_PUBLIC_KEY" ]; then
 	if [[ ! -z "$VISA_PAM_PUBLIC_KEY" && ! -f "$VISA_PAM_PUBLIC_KEY" ]]; then
 		echo "VISA PAM public key not found at $VISA_PAM_PUBLIC_KEY"
 		exit
@@ -83,7 +83,12 @@ export root_password=$VISA_ROOT_PASSWORD
 
 # Modify the files accordingly for the proxy
 sed -e "s|{http_proxy}|$PACKER_HTTP_PROXY|g" -e "s|{no_proxy}|$PACKER_NO_PROXY_HOSTS|g"  templates/system-base/environment.yml.tlt > templates/system-base/environment.yml
-sed -e "s|{http_proxy}|$VISA_HTTP_PROXY|g" -e "s|{https_proxy}|$VISA_HTTP_PROXY|g" -e "s|{no_proxy}|$VISA_NO_PROXY_HOSTS|g"  templates/system-base/system/etc/environment.tlt > templates/system-base/system/etc/environment
+
+if [ ! -z "$VISA_HTTP_PROXY" ]; then
+	sed -e "s|{http_proxy}|$VISA_HTTP_PROXY|g" -e "s|{https_proxy}|$VISA_HTTP_PROXY|g" -e "s|{no_proxy}|$VISA_NO_PROXY_HOSTS|g"  templates/system-base/system/etc/environment.tlt > templates/system-base/system/etc/environment
+else
+	echo "" > templates/system-base/system/etc/environment
+fi
 
 # Copy PAM file
 echo "Copying PAM module public key from $VISA_PAM_PUBLIC_KEY"

@@ -14,6 +14,24 @@ The process is simple to integrate into a CI/CD system and automatically upload 
 
 We use a pre-processing library called packme to generate the json manifest files used by Packer from simplified yaml. This also alows us to more easily build images from inherited components.
 
+## Features
+
+The virtual machine image created by these templates is a very simple data analysis machine used for demonstration purposed. The main features  demonstrated are as follows:
+
+- Guacamole/XRDP installation
+- Automatic connection to remote desktops (XRDP) using the VISA PAM module
+- Custom application installation
+- JupyterLab integration using conda environments
+- Custom background and welcom message
+- Power management modifications
+
+For a production environment you will probably need to look at
+- Integration to LDAP or other authentication systems
+- Access to network home directories
+- Access to scientific data
+- Adding more data analysis applications 
+- Configuration of NTP servers
+
 ## Installation
 
 ###  Cloning the repository
@@ -37,8 +55,8 @@ sudo apt install qemu qemu-kvm libvirt-daemon-system libvirt-clients bridge-util
 Add your user to the following groups:
 
 ```
-usermod -a -G libvirt $(whoami)
-usermod -a -G kvm $(whoami)
+sudo usermod -a -G libvirt $(whoami)
+sudo usermod -a -G kvm $(whoami)
 ```
 
 **After setting these user groups the machine must be rebooted**
@@ -65,7 +83,7 @@ Options and equivalent environment variables:
   -rp or --root-password <password>     VISA_ROOT_PASSWORD       set the root password for the VM
   -hp or --http-proxy <URL>             VISA_HTTP_PROXY          set the HTTP proxy URL
   -np or --no-proxy <no proxy hosts>    VISA_NO_PROXY_HOSTS      set the HTTP no proxy hosts
-  -nh or --not-headless                                          set build process not to be headless
+  -nh or --not-headless                                          set build process not to be headless (for debugging)
 ```
 
 You must specify a path to the VISA PAM public key and a root password. The proxy settings are optional.
@@ -78,18 +96,38 @@ Run the script to build the image, eg:
 
 The built images are stored in `templates/{template-name}/builds`
 
-### Converting from qcow to raw
+### Headless mode
+
+When running in *headless* mode you will not see the system installation process happening within the VM. You can however still connect to the VM during the installation to see what is happening using VNC. Looking at the log messages you will see something like :
+
+```
+    qemu: The VM will be run headless, without a GUI. If you want to
+    qemu: view the screen of the VM, connect via VNC without a password to
+    qemu: vnc://127.0.0.1:5991
+```
+
+Using a VNC client you can connect to this address and examine a running installation.
+
+### System requirements
+
+To build this example image, the process requires 4GB of memory and 1 CPU.
+
+For production images you may find that you require more memory and CPUS. We would typically recomment 8GB and at least 2 CPUs.
+
+The process also requires a lot of writing to the hard disk. To improve the build time we would recommend using an SSD.
+
+## Converting from qcow to raw
 
 ```bash
 cd templates/visa-apps/builds
 qemu-img convert -f qcow2 -O raw visa-apps-qemu.iso visa-apps.img
 ```
 
-### Upload an image to openstack
+## Upload an image to openstack
 
 Using the openstack cli we can upload an image to openstack. 
 
-#### Install OpenStack client
+### Install OpenStack client
 
 ```
 pip3 install python-openstackclient
@@ -111,12 +149,12 @@ export OS_INTERFACE=public
 export OS_IDENTITY_API_VERSION=3
 ```
 
-#### Upload to openstack: 
+### Upload to openstack: 
 
 This example will upload the image to the `VISA Production` project. If the `project` argument is ommitted then it will use the default value that is defined in your openrc file. 
 
 ```bash
-openstack image create visa-example --public --min-disk 15 --disk-format raw --file visa-apps.img
+openstack image create visa-example --public --min-disk 10 --disk-format raw --file visa-apps.img
 ```
 
 ## VISA Integration

@@ -22,4 +22,6 @@ jupyter labextension install @jupyter-widgets/jupyterlab-manager
 jupyter labextension install jupyter-matplotlib@0.7.4
 jupyter nbextension enable --py widgetsnbextension
 
+jupyter lab clean
+
 echo "Finished installing JupyterLab"

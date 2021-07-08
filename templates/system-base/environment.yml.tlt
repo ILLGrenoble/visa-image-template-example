@@ -3,7 +3,7 @@ environment:
   no_proxy: {no_proxy}
   cpus: 1
   memory: 4096
-  disk_size: 15000
+  disk_size: 10000
   ubuntu_mirror: http://archive.ubuntu.com/ubuntu/dists
   ubuntu_codename: bionic
   ubuntu_docker_image: ubuntu:18.04
