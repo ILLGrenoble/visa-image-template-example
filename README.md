@@ -16,7 +16,7 @@ We use a pre-processing library called packme to generate the json manifest file
 
 ## Features
 
-The virtual machine image created by these templates is a very simple data analysis machine used for demonstration purposed. The main features  demonstrated are as follows:
+The virtual machine image created by these templates is a very simple data analysis machine used for demonstration purposes. The main features  demonstrated are as follows:
 
 - Guacamole/XRDP installation
 - Automatic connection to remote desktops (XRDP) using the VISA PAM module
@@ -116,12 +116,6 @@ For production images you may find that you require more memory and CPUS. We wou
 
 The process also requires a lot of writing to the hard disk. To improve the build time we would recommend using an SSD.
 
-## Converting from qcow to raw
-
-```bash
-cd templates/visa-apps/builds
-qemu-img convert -f qcow2 -O raw visa-apps-qemu.iso visa-apps.img
-```
 
 ## Upload an image to openstack
 
@@ -141,7 +135,7 @@ A number of environment variables need to be set first:
 export OS_PROJECT_DOMAIN_NAME=default
 export OS_USERNAME={OPENSTACK_USERNAME}
 export OS_PASSWORD={OPENSTACK_PASSWORD}
-export OS_TENANT_NAME="VISA Development"
+export OS_TENANT_NAME={OPENSTACK_PROJECT}
 export OS_AUTH_URL=https://{the.os.cloud.host}:5000/v3
 export OS_USER_DOMAIN_NAME=default
 export OS_REGION_NAME="RegionOne"
@@ -154,7 +148,7 @@ export OS_IDENTITY_API_VERSION=3
 This example will upload the image to the `VISA Production` project. If the `project` argument is ommitted then it will use the default value that is defined in your openrc file. 
 
 ```bash
-openstack image create visa-example --public --min-disk 10 --disk-format raw --file visa-apps.img
+openstack image create visa-example --public --min-disk 10 --disk-format qcow2 --file visa-apps-qemu.iso
 ```
 
 ## VISA Integration
