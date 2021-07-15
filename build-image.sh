@@ -102,7 +102,7 @@ source $VENV_DIR/bin/activate
 
 echo "Installing packme"
 pip3 install wheel
-pip3 install lib/packme
+pip3 install packme
 
 export PACKER_LOG=1
 # Run packme
