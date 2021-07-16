@@ -179,8 +179,7 @@ if [ $? -eq 0 ]; then
 fi
 ```
 
-This creates a user with the same username as the owner, and creates a random password (the password isn't needed since VISA PAM is used).
-
+As well as obtaining the VISA PAM public key, this script creates a user with the same username as the owner, and creates a random password (the password isn't needed since VISA PAM is used).
 
 ## Acknowledgements
 
