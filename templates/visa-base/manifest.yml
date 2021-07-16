@@ -33,12 +33,6 @@ packer:
       destination: /usr/local/bin/welcome-visa
     - type: shell
       inline:
-        - mkdir -p /etc/visa
-    - type: file
-      source: system/etc/visa/public.pem
-      destination: /etc/visa/public.pem
-    - type: shell
-      inline:
         - mkdir -p /etc/guacamole
     - type: file
       source: system/etc/guacamole/guacd.conf

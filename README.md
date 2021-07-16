@@ -79,19 +79,18 @@ The script requires some parameters to be set to build the image for your system
 build-image.sh [options]
 
 Options and equivalent environment variables:
-  -pp or --pam-public <path>            VISA_PAM_PUBLIC_KEY      set the PAM module public key location
   -rp or --root-password <password>     VISA_ROOT_PASSWORD       set the root password for the VM
   -hp or --http-proxy <URL>             VISA_HTTP_PROXY          set the HTTP proxy URL
   -np or --no-proxy <no proxy hosts>    VISA_NO_PROXY_HOSTS      set the HTTP no proxy hosts
   -nh or --not-headless                                          set build process not to be headless (for debugging)
 ```
 
-You must specify a path to the VISA PAM public key and a root password. The proxy settings are optional.
+You must specify a root password. The proxy settings are optional.
 
 Run the script to build the image, eg:
 
 ```bash
-./build-image.sh -pp {/root/to/visa/public/key} -rp {root_password}
+./build-image.sh -rp {root_password}
 ```
 
 The built images are stored in `templates/{template-name}/builds`
@@ -125,7 +124,7 @@ qemu-img convert -f qcow2 -O raw visa-apps-qemu.iso visa-apps.img
 
 ## Upload an image to openstack
 
-Using the openstack cli we can upload an image to openstack. 
+Using the openstack CLI we can upload an image to openstack. 
 
 ### Install OpenStack client
 
@@ -171,6 +170,13 @@ owner=$(cloud-init query ds.meta_data.meta.owner)
 
 # Create the user with a random password
 useradd -m -U -p $(date +%s | sha256sum | base64 | head -c 32) -s /bin/bash ${owner}
+
+# /etc/visa/public.pem VISA PAM public key
+PAM_PUBLIC_KEY=$(cloud-init query ds.meta_data.meta.pamPublicKey)
+if [ $? -eq 0 ]; then
+  mkdir -p /etc/visa
+  echo "$PAM_PUBLIC_KEY" > /etc/visa/public.pem
+fi
 ```
 
 This creates a user with the same username as the owner, and creates a random password (the password isn't needed since VISA PAM is used).

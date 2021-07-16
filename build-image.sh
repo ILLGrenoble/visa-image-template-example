@@ -5,7 +5,6 @@ usage() {
 	echo "build-image.sh [options]"
 	echo
 	echo "Options and equivalent environment variables:"
-	echo "  -pp or --pam-public <path>            VISA_PAM_PUBLIC_KEY      set the PAM module public key location"
 	echo "  -rp or --root-password <password>     VISA_ROOT_PASSWORD       set the root password for the VM"
 	echo "  -hp or --http-proxy <URL>             VISA_HTTP_PROXY          set the HTTP proxy URL"
 	echo "  -np or --no-proxy <no proxy hosts>    VISA_NO_PROXY_HOSTS      set the HTTP no proxy hosts"
@@ -24,12 +23,6 @@ key="$1"
 case $key in
 	-rp|--root-psasword)
 	VISA_ROOT_PASSWORD="$2"
-	shift
-	shift
-	;;
-
-	-pp|--pam-public)
-	VISA_PAM_PUBLIC_KEY="$2"
 	shift
 	shift
 	;;
@@ -59,21 +52,9 @@ case $key in
 esac
 done
 
-# Verify PAM public/private keys parameters
+# Verify root password is set
 if [ -z "$VISA_ROOT_PASSWORD" ]; then
 	echo "You need to specify a root password for the VM"
-	usage
-	exit
-fi
-
-# Verify root password is set
-if [ ! -z "$VISA_PAM_PUBLIC_KEY" ]; then
-	if [[ ! -z "$VISA_PAM_PUBLIC_KEY" && ! -f "$VISA_PAM_PUBLIC_KEY" ]]; then
-		echo "VISA PAM public key not found at $VISA_PAM_PUBLIC_KEY"
-		exit
-	fi
-else
-	echo "You need to specify the VISA PAM public key location"
 	usage
 	exit
 fi
@@ -89,10 +70,6 @@ if [ ! -z "$VISA_HTTP_PROXY" ]; then
 else
 	echo "" > templates/system-base/system/etc/environment
 fi
-
-# Copy PAM file
-echo "Copying PAM module public key from $VISA_PAM_PUBLIC_KEY"
-cp "$VISA_PAM_PUBLIC_KEY" templates/visa-base/system/etc/visa/public.pem
 
 
 VENV_DIR=.venv_packme
