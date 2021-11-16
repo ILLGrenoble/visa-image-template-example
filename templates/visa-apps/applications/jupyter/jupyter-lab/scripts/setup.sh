@@ -15,6 +15,7 @@ pip install ipywidgets==7.5.1
 
 # enable h5web
 pip install jupyterlab_h5web[full]==0.0.8
+jupyter lab clean
 jupyter lab build
 
 # enable interactive matplotlib

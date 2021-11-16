@@ -93,7 +93,9 @@ Run the script to build the image, eg:
 ./build-image.sh -rp {root_password}
 ```
 
-The built images are stored in `templates/{template-name}/builds`
+The built images are stored in `templates/{template-name}/builds`. 
+
+Please note that this process can take roughly 30 minutes to an hour and may appear at times that the process isn't advancing (such as when Packer tries to connect to the VM at the beginning of the build process and waits for SSH to be available). As described below, you can connect to the VM using VNC to see visually what is happening to create the VM.
 
 ### Headless mode
 
