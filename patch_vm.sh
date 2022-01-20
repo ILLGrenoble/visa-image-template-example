@@ -19,10 +19,11 @@ restore_manifests() {
 }
 
 nested_virt() {
-  IFS=$'\n' read -r -d '' KEY <<EOM
+  # IFS=$'\n' prevents leading (and trailing) spaces from being removed
+  IFS=$'\n' read -r -d '' KEY <<'EOM'
       qemuargs:
 EOM
-  IFS=$'\n' read -r -d '' VAL <<EOM
+  IFS=$'\n' read -r -d '' VAL <<'EOM'
         - - "-cpu"
           - "host"
         - - "-enable-kvm"
@@ -52,8 +53,7 @@ patch_files() {
 
 compare_files() {
   for file in ./templates/**/manifest.yml; do
-    echo "$file"
-    diff "$file"{.BKP,} || true # diff return a non-zero value when there are differences
+    diff --color -u "$file"{.BKP,} || true # diff return a non-zero value when there are differences
   done
 }
 
