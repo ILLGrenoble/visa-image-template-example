@@ -117,6 +117,22 @@ For production images you may find that you require more memory and CPUS. We wou
 
 The process also requires a lot of writing to the hard disk. To improve the build time we would recommend using an SSD.
 
+### Building the image inside a VM with nested virtualisation
+
+When building the images inside a VM with nested virtualisation some extra flags are required for Packer. A script (`patch_vm.sh`) is provided to patch the Packer manifest file (it will test too whether the build process is happening within a VM and that nested virtualisation is supported too).
+
+To patch the Packer manifest, run the following command:
+
+```bash
+patch_vm.sh p
+```
+
+To revert the patch run:
+
+```bash
+patch_vm.sh r
+```
+
 ## Converting from qcow to raw
 
 ```bash
