@@ -29,14 +29,12 @@ case $key in
 
 	-hp|--http-proxy)
 	VISA_HTTP_PROXY="$2"
-	PACKER_HTTP_PROXY="$2"
 	shift
 	shift
 	;;
 
 	-np|--no-proxy)
 	VISA_NO_PROXY_HOSTS="$2"
-	PACKER_NO_PROXY_HOSTS="$2"
 	shift
 	shift
 	;;
@@ -57,6 +55,14 @@ if [ -z "$VISA_ROOT_PASSWORD" ]; then
 	echo "You need to specify a root password for the VM"
 	usage
 	exit
+fi
+
+# Set PACKER_HTTP_PROXY variables if proxy vars have been specified
+if [ ! -z "$VISA_HTTP_PROXY" ]; then
+	PACKER_HTTP_PROXY="$VISA_HTTP_PROXY"
+fi
+if [ ! -z "$VISA_NO_PROXY_HOSTS" ]; then
+	PACKER_NO_PROXY_HOSTS="$VISA_NO_PROXY_HOSTS"
 fi
 
 # Set the packer environment variables
