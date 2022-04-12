@@ -17,8 +17,6 @@ packer:
       script: scripts/dependencies.sh
     - type: shell
       script: scripts/visa_pam.sh
-    - type: shell
-      script: scripts/visa_user.sh
     - type: file
       source: system/etc/firefox/syspref.js
       destination: /etc/firefox/syspref.js
